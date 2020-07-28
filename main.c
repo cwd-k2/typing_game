@@ -95,13 +95,9 @@ int main (int argc, char *argv[]) {
     curr = sentences[i];
     head = sentences[i];
 
-    for (p = sentences[i]; *p != '\0'; p++) {
-      tail = p;
-    }
+    for (p = sentences[i]; *p != '\0'; p++) tail = p;
 
-    if (*curr == '\0') {
-      break;
-    }
+    if (*curr == '\0') break;
 
     wrefresh (win);
 
@@ -118,9 +114,7 @@ int main (int argc, char *argv[]) {
       x = center_x;
 
       wattron (win, COLOR_PAIR (PREVIOUS_CHARS));
-      while (--p >= head && --x >= 1) {
-        mvwaddch (win, y, x, *p);
-      }
+      while (--p >= head && --x >= 1) mvwaddch (win, y, x, *p);
       wattroff (win, COLOR_PAIR (PREVIOUS_CHARS));
 
       /*
@@ -132,9 +126,7 @@ int main (int argc, char *argv[]) {
       x = center_x;
 
       wattron (win, COLOR_PAIR (NEXT_CHARS));
-      while (++p <= tail && ++x <= max_x - 2) {
-        mvwaddch (win, y, x, *p);
-      }
+      while (++p <= tail && ++x <= max_x - 2) mvwaddch (win, y, x, *p);
       wattroff (win, COLOR_PAIR (NEXT_CHARS));
 
       /*
@@ -208,15 +200,11 @@ int read_sentences_from_file (char *filename, char sentences[MAX_SENTENCES + 1][
 
   fp = fopen (filename, "r");
 
-  if (fp == NULL) {
-    return -1;
-  }
+  if (fp == NULL) return -1;
 
   while (fgets (str, MAX_CHARS, fp) != NULL && i <= MAX_SENTENCES) {
     /* 雑だけど最後の改行文字を消す */
-    if (str[strlen (str) - 1] == '\n') {
-      str[strlen (str) - 1] = '\0';
-    }
+    if (str[strlen (str) - 1] == '\n') str[strlen (str) - 1] = '\0';
     strcpy (sentences[i++], str);
   }
 
