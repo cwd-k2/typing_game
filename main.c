@@ -105,9 +105,7 @@ int main (int argc, char *argv[]) {
       //wclear (win);
       wclrtoeol (win);
 
-      /*
-       * 前の部分の描画
-       */
+      /* 前の部分の描画 */
       p = curr;
 
       y = center_y;
@@ -117,9 +115,7 @@ int main (int argc, char *argv[]) {
       while (--p >= head && --x >= 1) mvwaddch (win, y, x, *p);
       wattroff (win, COLOR_PAIR (PREVIOUS_CHARS));
 
-      /*
-       * 後の部分の描画
-       */
+      /* 後の部分の描画 */
       p = curr;
 
       y = center_y;
@@ -129,9 +125,7 @@ int main (int argc, char *argv[]) {
       while (++p <= tail && ++x <= max_x - 2) mvwaddch (win, y, x, *p);
       wattroff (win, COLOR_PAIR (NEXT_CHARS));
 
-      /*
-       * 現在の位置
-       */
+      /* 現在の位置 */
       p = curr;
 
       y = center_y;
