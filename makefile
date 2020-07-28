@@ -1,2 +1,4 @@
+CC=gcc
+
 main: main.c
-	clang main.c -lncurses -o main
+	$(CC) main.c -lncurses -o main
