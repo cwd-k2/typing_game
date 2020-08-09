@@ -27,7 +27,7 @@ int main (int argc, char *argv[]) {
   WINDOW *win;
 
   char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1] = { { '\0' } };
-  char *filename = "./sentences.txt";
+  char *filename = argv[1];
 
   if (read_sentences_from_file (filename, sentences) == -1) {
     printf ("cannot open file %s.\n", filename);
@@ -94,15 +94,14 @@ int main (int argc, char *argv[]) {
 
     curr = sentences[i];
     head = sentences[i];
-
-    for (p = sentences[i]; *p != '\0'; p++) tail = p;
+    tail = sentences[i];
+    while (tail[1] != '\0') tail++;
 
     if (*curr == '\0') break;
 
     wrefresh (win);
 
     while (*curr != '\0') {
-      //wclear (win);
       wclrtoeol (win);
 
       /* 前の部分の描画 */
@@ -144,7 +143,9 @@ int main (int argc, char *argv[]) {
 
       if (ch == *curr) {
         correctcount++; curr++;
-      } else {
+      }
+
+      else {
         misscount++;
 
         /* ミスしすぎはハゲ */
@@ -156,6 +157,7 @@ int main (int argc, char *argv[]) {
 
         mvwaddch (win, y - 1, x, ch);
       }
+
       box (win, 0, 0);
       wrefresh (win);
     }
@@ -187,7 +189,10 @@ int main (int argc, char *argv[]) {
  * 外部ファイルから使う文を読み込み
  * 成功時は行数 失敗時は -1 を返す
  */
-int read_sentences_from_file (char *filename, char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1]) {
+int read_sentences_from_file (
+  char *filename,
+  char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1]
+) {
   int i = 0;
   FILE *fp;
   char str[MAX_CHARS + 1];
@@ -199,6 +204,7 @@ int read_sentences_from_file (char *filename, char sentences[MAX_SENTENCES + 1][
   while (fgets (str, MAX_CHARS, fp) != NULL && i <= MAX_SENTENCES) {
     /* 雑だけど最後の改行文字を消す */
     if (str[strlen (str) - 1] == '\n') str[strlen (str) - 1] = '\0';
+
     strcpy (sentences[i++], str);
   }
 
@@ -206,5 +212,8 @@ int read_sentences_from_file (char *filename, char sentences[MAX_SENTENCES + 1][
   return i;
 }
 
-void shuffle_sentences (char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1], int size) {
+void shuffle_sentences (
+  char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1],
+  int size
+) {
 }
