@@ -15,6 +15,7 @@
 #define NEXT_CHARS     3
 
 int read_sentences_from_file (char *, char**);
+void draw_window (WINDOW *, char *, char *, char *, int, int);
 
 int main (int argc, char *argv[]) {
   char *p, *curr, *head, *tail;
@@ -80,6 +81,7 @@ int main (int argc, char *argv[]) {
 
   /* 四角いウィンドウ作る */
   win = subwin (stdscr, win_y, win_x, 2, 14);
+
   /* 外枠 */
   box (win, 0, 0);
 
@@ -89,9 +91,6 @@ int main (int argc, char *argv[]) {
   time (&s_time);
 
   for (int i = 0; i < sentences_amount; i++) {
-    y = center_y;
-    x = center_x;
-
     curr = sentences[i];
     head = sentences[i];
     tail = sentences[i];
@@ -99,49 +98,15 @@ int main (int argc, char *argv[]) {
 
     if (*curr == '\0') break;
 
-    wrefresh (win);
-
     while (*curr != '\0') {
-      wclrtoeol (win);
+      // 描画
+      draw_window (win, curr, head, tail, center_x, center_y);
 
-      /* 前の部分の描画 */
-      p = curr;
-
-      y = center_y;
-      x = center_x;
-
-      wattron (win, COLOR_PAIR (PREVIOUS_CHARS));
-      while (--p >= head && --x >= 1) mvwaddch (win, y, x, *p);
-      wattroff (win, COLOR_PAIR (PREVIOUS_CHARS));
-
-      /* 後の部分の描画 */
-      p = curr;
-
-      y = center_y;
-      x = center_x;
-
-      wattron (win, COLOR_PAIR (NEXT_CHARS));
-      while (++p <= tail && ++x <= max_x - 2) mvwaddch (win, y, x, *p);
-      wattroff (win, COLOR_PAIR (NEXT_CHARS));
-
-      /* 現在の位置 */
-      p = curr;
-
-      y = center_y;
-      x = center_x;
-
-      wattron (win, COLOR_PAIR (CURRENT_CHAR));
-      mvwaddch (win, y, x, *curr);
-      wattroff (win, COLOR_PAIR (CURRENT_CHAR));
-
-      box (win, 0, 0);
-      wrefresh (win);
-      touchwin (win);
-
+      // キー入力
       ch = getch ();
       assert (ch != -1);
 
-      // TODO: 画面描画とキー入力は流石に分けた方がいいかもしれない
+      // 正解ならば次の文字に進む
       if (ch == *curr) {
         correctcount++; curr++;
       }
@@ -156,7 +121,7 @@ int main (int argc, char *argv[]) {
           return 0;
         }
 
-        mvwaddch (win, y - 1, x, ch);
+        mvwaddch (win, center_y - 1, center_x, ch);
       }
 
       box (win, 0, 0);
@@ -178,9 +143,7 @@ int main (int argc, char *argv[]) {
   delwin (win);
   endwin ();
 
-  for (int i = 0; i < sentences_amount; i++) {
-    free (sentences[i]);
-  }
+  for (int i = 0; i < sentences_amount; i++) free (sentences[i]);
 
   printf ("time:    %ld\n", e_time - s_time);
   printf ("total:   %d\n", correctcount + misscount);
@@ -195,7 +158,6 @@ int main (int argc, char *argv[]) {
  * 成功時は行数 失敗時は -1 を返す
  */
 int read_sentences_from_file (char *filename, char **sentences) {
-
   int i = 0;
   FILE *fp;
   char str[MAX_CHARS + 1];
@@ -216,4 +178,49 @@ int read_sentences_from_file (char *filename, char **sentences) {
 
   fclose (fp);
   return i;
+}
+
+void draw_window (WINDOW *win, char *curr, char *head, char *tail, int center_x, int center_y) {
+  int x, y;
+  char *p;
+  int max_y, max_x;
+
+  getmaxyx (stdscr, max_y, max_x);
+
+  wclrtoeol (win);
+
+  /* 前の部分の描画 */
+  p = curr;
+
+  y = center_y;
+  x = center_x;
+
+  wattron (win, COLOR_PAIR (PREVIOUS_CHARS));
+  while (--p >= head && --x >= 1) mvwaddch (win, y, x, *p);
+  wattroff (win, COLOR_PAIR (PREVIOUS_CHARS));
+
+  /* 後の部分の描画 */
+  p = curr;
+
+  y = center_y;
+  x = center_x;
+
+  wattron (win, COLOR_PAIR (NEXT_CHARS));
+  while (++p <= tail && ++x <= max_x - 2) mvwaddch (win, y, x, *p);
+  wattroff (win, COLOR_PAIR (NEXT_CHARS));
+
+  /* 現在の位置 */
+  p = curr;
+
+  y = center_y;
+  x = center_x;
+
+  wattron (win, COLOR_PAIR (CURRENT_CHAR));
+  mvwaddch (win, y, x, *curr);
+  wattroff (win, COLOR_PAIR (CURRENT_CHAR));
+
+  box (win, 0, 0);
+  touchwin (win);
+
+  wrefresh (win);
 }

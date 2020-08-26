@@ -1,1 +1,2 @@
 -std=gnu18
+-lncurses
