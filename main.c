@@ -14,8 +14,7 @@
 #define PREVIOUS_CHARS 2
 #define NEXT_CHARS     3
 
-int read_sentences_from_file (char *, char[MAX_SENTENCES + 1][MAX_CHARS + 1]);
-void shuffle_sentences (char[MAX_SENTENCES + 1][MAX_CHARS + 1], int);
+int read_sentences_from_file (char *, char**);
 
 int main (int argc, char *argv[]) {
   char *p, *curr, *head, *tail;
@@ -26,10 +25,11 @@ int main (int argc, char *argv[]) {
 
   WINDOW *win;
 
-  char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1] = { { '\0' } };
+  char *sentences[MAX_SENTENCES];
   char *filename = argv[1];
 
-  if (read_sentences_from_file (filename, sentences) == -1) {
+  int sentences_amount = read_sentences_from_file(filename, sentences);
+  if (sentences_amount == -1) {
     printf ("cannot open file %s.\n", filename);
     return 0;
   }
@@ -88,7 +88,7 @@ int main (int argc, char *argv[]) {
   /* 開始時間 */
   time (&s_time);
 
-  for (int i = 0; i < 20; i++) {
+  for (int i = 0; i < sentences_amount; i++) {
     y = center_y;
     x = center_x;
 
@@ -141,6 +141,7 @@ int main (int argc, char *argv[]) {
       ch = getch ();
       assert (ch != -1);
 
+      // TODO: 画面描画とキー入力は流石に分けた方がいいかもしれない
       if (ch == *curr) {
         correctcount++; curr++;
       }
@@ -177,6 +178,10 @@ int main (int argc, char *argv[]) {
   delwin (win);
   endwin ();
 
+  for (int i = 0; i < sentences_amount; i++) {
+    free (sentences[i]);
+  }
+
   printf ("time:    %ld\n", e_time - s_time);
   printf ("total:   %d\n", correctcount + misscount);
   printf ("correct: %d\n", correctcount);
@@ -189,10 +194,8 @@ int main (int argc, char *argv[]) {
  * 外部ファイルから使う文を読み込み
  * 成功時は行数 失敗時は -1 を返す
  */
-int read_sentences_from_file (
-  char *filename,
-  char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1]
-) {
+int read_sentences_from_file (char *filename, char **sentences) {
+
   int i = 0;
   FILE *fp;
   char str[MAX_CHARS + 1];
@@ -205,15 +208,12 @@ int read_sentences_from_file (
     /* 雑だけど最後の改行文字を消す */
     if (str[strlen (str) - 1] == '\n') str[strlen (str) - 1] = '\0';
 
-    strcpy (sentences[i++], str);
+    if (strlen(str) != 0) {
+      sentences[i] = (char *) malloc (sizeof (char) * strlen(str) + 1);
+      strcpy (sentences[i++], str);
+    }
   }
 
   fclose (fp);
   return i;
-}
-
-void shuffle_sentences (
-  char sentences[MAX_SENTENCES + 1][MAX_CHARS + 1],
-  int size
-) {
 }
