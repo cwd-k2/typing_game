@@ -1,0 +1,106 @@
+﻿---
+Language: Cpp
+Standard: Auto
+
+DisableFormat: false
+
+UseTab: Never
+TabWidth: 2
+IndentWidth: 2
+AccessModifierOffset: -2
+IndentCaseLabels: false
+
+ColumnLimit: 120
+
+SortIncludes: true
+IncludeBlocks: Preserve
+# IncludeCategories:
+#   - Regex:           '<[[:alnum:].]+>'
+#     Priority:        2
+#   - Regex:           '.*'
+#     Priority:        1
+#     SortPriority:    0
+
+AlignAfterOpenBracket: AlwaysBreak
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignEscapedNewlines: Left
+AlignOperands: true
+AlignTrailingComments: true
+
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: true
+
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: true
+AlwaysBreakTemplateDeclarations: Yes
+
+BinPackArguments: true
+BinPackParameters: false
+
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: true
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: true
+  BeforeElse: true
+  # BeforeLambdaBody: false
+  # BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+
+CompactNamespaces: false
+Cpp11BracedListStyle: false
+DerivePointerAlignment: false
+IndentPPDirectives: AfterHash
+IndentWrappedFunctionNames: false
+KeepEmptyLinesAtTheStartOfBlocks: false
+NamespaceIndentation: All
+
+PointerAlignment: Right
+ReflowComments: true
+
+SortUsingDeclarations: true
+
+SpaceBeforeParens: Always
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: true
+
+SpaceAfterCStyleCast: true
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false

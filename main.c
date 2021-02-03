@@ -1,10 +1,10 @@
+#include <assert.h>
+#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <ncurses.h>
-#include <assert.h>
 #include <time.h>
+#include <unistd.h>
 
 #define MAX_CHARS     500
 #define MAX_SENTENCES 1000
@@ -14,14 +14,14 @@
 #define PREVIOUS_CHARS 2
 #define NEXT_CHARS     3
 
-int read_sentences_from_file (char *, char**);
+int  read_sentences_from_file (char *, char **);
 void draw_window (WINDOW *, char *, char *, char *, int, int);
 
 int main (int argc, char *argv[]) {
-  char *p, *curr, *head, *tail;
-  char ch;
-  int misscount, correctcount;
-  int max_y, max_x, win_y, win_x, center_y, center_x, y, x;
+  char * p, *curr, *head, *tail;
+  char   ch;
+  int    misscount, correctcount;
+  int    max_y, max_x, win_y, win_x, center_y, center_x, y, x;
   time_t s_time, e_time;
 
   WINDOW *win;
@@ -29,7 +29,7 @@ int main (int argc, char *argv[]) {
   char *sentences[MAX_SENTENCES];
   char *filename = argv[1];
 
-  int sentences_amount = read_sentences_from_file(filename, sentences);
+  int sentences_amount = read_sentences_from_file (filename, sentences);
   if (sentences_amount == -1) {
     printf ("cannot open file %s.\n", filename);
     return 0;
@@ -52,9 +52,9 @@ int main (int argc, char *argv[]) {
 
   start_color ();
 
-  init_pair (CURRENT_CHAR,   COLOR_BLACK,  COLOR_YELLOW);
+  init_pair (CURRENT_CHAR, COLOR_BLACK, COLOR_YELLOW);
   init_pair (PREVIOUS_CHARS, COLOR_YELLOW, COLOR_BLACK);
-  init_pair (NEXT_CHARS,     COLOR_WHITE,  COLOR_BLACK);
+  init_pair (NEXT_CHARS, COLOR_WHITE, COLOR_BLACK);
 
   /* TODO: スタート画面的な */
 
@@ -108,7 +108,8 @@ int main (int argc, char *argv[]) {
 
       // 正解ならば次の文字に進む
       if (ch == *curr) {
-        correctcount++; curr++;
+        correctcount++;
+        curr++;
       }
 
       else {
@@ -158,9 +159,9 @@ int main (int argc, char *argv[]) {
  * 成功時は行数 失敗時は -1 を返す
  */
 int read_sentences_from_file (char *filename, char **sentences) {
-  int i = 0;
+  int   i = 0;
   FILE *fp;
-  char str[MAX_CHARS + 1];
+  char  str[MAX_CHARS + 1];
 
   fp = fopen (filename, "r");
 
@@ -170,8 +171,8 @@ int read_sentences_from_file (char *filename, char **sentences) {
     /* 雑だけど最後の改行文字を消す */
     if (str[strlen (str) - 1] == '\n') str[strlen (str) - 1] = '\0';
 
-    if (strlen(str) != 0) {
-      sentences[i] = (char *) malloc (sizeof (char) * strlen(str) + 1);
+    if (strlen (str) != 0) {
+      sentences[i] = (char *) malloc (sizeof (char) * strlen (str) + 1);
       strcpy (sentences[i++], str);
     }
   }
@@ -181,9 +182,9 @@ int read_sentences_from_file (char *filename, char **sentences) {
 }
 
 void draw_window (WINDOW *win, char *curr, char *head, char *tail, int center_x, int center_y) {
-  int x, y;
+  int   x, y;
   char *p;
-  int max_y, max_x;
+  int   max_y, max_x;
 
   getmaxyx (stdscr, max_y, max_x);
 
